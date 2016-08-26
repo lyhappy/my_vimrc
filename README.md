@@ -22,3 +22,30 @@ $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 $ cd ~/.vim/bundle/YouCompleteMe/
 $ ./install.py --clang-completer
 ```
+
+## Ctags (on Mac OS)
+
+A Exuberant Ctags should be installed first on Mac OS.
+
+```
+$ brew install ctags
+```
+
+And the default location where brew installs its packages is "usr/local/bin/", so edit .vimrc and let:
+
+```
+let g:tagbar_ctags_bin='/usr/local/bin/ctags'
+```
+
+### Installed Plugins:
+>
+Plugin 'gmarik/vundle'<br>
+Plugin 'scrooloose/nerdtree'<br>
+Plugin 'bling/vim-airline'<br>
+Plugin 'majutsushi/tagbar'<br>
+Plugin 'Valloric/YouCompleteMe'<br>
+Plugin 'dracula/vim'<br>
+Plugin 'scrooloose/syntastic'<br>
+Plugin 'nvie/vim-flake8'<br>
+Plugin 'mru.vim'
+
