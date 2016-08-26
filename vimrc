@@ -64,7 +64,7 @@ let NERDTreeShowBookmarks=1
 map <F4> <ESC> :NERDTreeToggle<CR>
 
 " Tlist
-let Tlist_Auto_Open=1
+" let Tlist_Auto_Open=1
 let Tlist_WinWidth=30
 map <F3> <ESC> :TlistToggle <CR>
 
@@ -153,7 +153,9 @@ Plugin 'bling/vim-airline'
 set laststatus=2
 
 Plugin 'majutsushi/tagbar'
-"nmap <Leader>tb :TagbarToggle<CR>        "快捷键设置
+" nmap <Leader>tb :TagbarToggle<CR>        "快捷键设置
+" for mac os
+" let g:tagbar_ctags_bin='/usr/local/bin/ctags'            "ctags程序的路径
 let g:tagbar_ctags_bin='ctags'            "ctags程序的路径
 let g:tagbar_width=30                    "窗口宽度的设置
 let g:tagbar_left = 1
