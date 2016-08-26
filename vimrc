@@ -64,7 +64,7 @@ let NERDTreeShowBookmarks=1
 map <F4> <ESC> :NERDTreeToggle<CR>
 
 " Tlist
-let Tlist_Auto_Open=1
+" let Tlist_Auto_Open=1
 let Tlist_WinWidth=30
 map <F3> <ESC> :TlistToggle <CR>
 
