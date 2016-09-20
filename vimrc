@@ -12,6 +12,10 @@ nmap <leader>w :w<CR>
 nmap <leader>p :!python %<CR>
 " 按,m取消高亮搜索结果
 nmap <silent> <leader>m :nohlsearch<CR>
+" 按,h进入16进制模式
+nmap <leader>h :%!xxd<CR>
+" 按,t进入文本模式
+nmap <leader>t :%!xxd -r<CR>
 
 " 在上下移动光标时，光标的上方或下方至少会保留显示的行数
 set scrolloff=7
