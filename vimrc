@@ -251,7 +251,7 @@ let g:miniBufExplMapWindowNavArrows = 1
 let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplModSelTarget = 1
 let g:bufExplorerMaxHeight=30
-let g:miniBufExplorerMoreThanOne=0
+" let g:miniBufExplorerMoreThanOne=0
 
 Plugin 'gtags.vim'
 " cscope
