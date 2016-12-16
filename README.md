@@ -50,8 +50,8 @@ Plugin 'Valloric/YouCompleteMe'<br>
 Plugin 'dracula/vim'<br>
 Plugin 'scrooloose/syntastic'<br>
 Plugin 'nvie/vim-flake8'<br>
-Plugin 'mru.vim'
-Plugin 'Visual-Mark'
-Plugin 'minibufexpl.vim'
+Plugin 'mru.vim'<br>
+Plugin 'Visual-Mark'<br>
+Plugin 'minibufexpl.vim'<br>
 Plugin 'gtags.vim'
 
