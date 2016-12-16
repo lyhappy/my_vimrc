@@ -16,6 +16,9 @@ $ cd ~/.vim/bundle/
 $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 ```
 
+## Auto Download & Install Plugins
+Start vim, and execute the command `:BundleInstall`.
+
 ## Compile and Install YouCompleteMe
 
 ```
