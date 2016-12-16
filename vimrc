@@ -2,9 +2,6 @@
 let mapleader = ','
 let g:mapleader = ','
 
-" 打开一个文件时，尝试utf8,gbk两种编码
-set fencs=utf-8,gbk
-
 " 使用,ev打开配置文件
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 " 按,sv重载配置文件
@@ -249,6 +246,12 @@ nmap <leader>mn :bnext<CR>
 nmap <leader>mp :bprevious<CR>
 
 Plugin 'minibufexpl.vim'
+let g:miniBufExplMapWindowNavVim = 1 
+let g:miniBufExplMapWindowNavArrows = 1 
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplModSelTarget = 1
+let g:bufExplorerMaxHeight=30
+let g:miniBufExplorerMoreThanOne=0
 
 Plugin 'gtags.vim'
 " cscope
