@@ -48,4 +48,7 @@ Plugin 'dracula/vim'<br>
 Plugin 'scrooloose/syntastic'<br>
 Plugin 'nvie/vim-flake8'<br>
 Plugin 'mru.vim'
+Plugin 'Visual-Mark'
+Plugin 'minibufexpl.vim'
+Plugin 'gtags.vim'
 

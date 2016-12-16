@@ -19,6 +19,8 @@ nmap <leader>t :%!xxd -r<CR>
 
 " 在上下移动光标时，光标的上方或下方至少会保留显示的行数
 set scrolloff=7
+" 打开文件时，同时尝试utf-8和gbk编码
+set fencs=utf-8,gbk
 
 " Go to home and end using capitalized directions
 noremap H ^
@@ -62,15 +64,15 @@ filetype on
 filetype plugin on
 
 " NerdTree
-autocmd VimEnter * NERDTree
-let NERDTreeWinPos="right"
-let NERDTreeShowBookmarks=1
-map <F4> <ESC> :NERDTreeToggle<CR>
+" autocmd VimEnter * NERDTree
+" let NERDTreeWinPos="right"
+" let NERDTreeShowBookmarks=1
+" map <F4> <ESC> :NERDTreeToggle<CR>
 
 " Tlist
 " let Tlist_Auto_Open=1
-let Tlist_WinWidth=30
-map <F3> <ESC> :TlistToggle <CR>
+" let Tlist_WinWidth=30
+" map <F3> <ESC> :TlistToggle <CR>
 
 " let Tlist_Auto_Update=1
 
@@ -123,9 +125,9 @@ set incsearch        " 输入字符串就显示匹配点
 set hlsearch       
 
 
-" 按下F5重新生成tag文件，并更新taglist
-map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
-imap <F5> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
+" 按下F7重新生成tag文件，并更新taglist
+map <F7> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
+imap <F7> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
 set tags=tags
 set tags+=./tags "add current directory's generated tags file
 
@@ -142,6 +144,7 @@ let NERDTreeShowBookmarks=1
 let NERDTreeWinSize=30
 wincmd w
 autocmd VimEnter * wincmd w
+nmap <leader>nf :NERDTreeFind<CR>
 
 " let NERDTreeDirArrowExpandable='+'
 " let NERDTreeDirArrowCollapsible='-' 
@@ -163,7 +166,7 @@ Plugin 'majutsushi/tagbar'
 let g:tagbar_ctags_bin='ctags'            "ctags程序的路径
 let g:tagbar_width=30                    "窗口宽度的设置
 let g:tagbar_left = 1
-map <F2> :Tagbar<CR>
+map <F3> :Tagbar<CR>
 "autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 "如果是c语言的程序的话，tagbar自动开启
 
@@ -195,11 +198,11 @@ let g:ycm_min_num_of_chars_for_completion=2	"
 " 从第2个键入字符就开始罗列匹配项
 let g:ycm_cache_omnifunc=0	" 禁止缓存匹配项,每次都重新生成匹配项
 let g:ycm_seed_identifiers_with_syntax=1	" 语法关键字补全
-nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>	
-"force recomile with
+" nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>	
+" force recomile with
 " syntastic
-"nnoremap <leader>lo :lopen<CR>	"open locationlist
-"nnoremap <leader>lc :lclose<CR>	"close locationlist
+" nnoremap <leader>lo :lopen<CR>	"open locationlist
+" nnoremap <leader>lc :lclose<CR>	"close locationlist
 inoremap <leader><leader> <C-x><C-o>
 "在注释输入中也能补全
 let g:ycm_complete_in_comments = 1
@@ -234,6 +237,26 @@ let python_highlight_all=1
 Plugin 'mru.vim'
 nmap <cr> :MRU<cr>
 
+" Xdebug for php
+" for more info. https://www.github.com/vim-scripts/Xdebug
+Plugin 'joonty/vim-xdebug.git'
+
+Plugin 'Visual-Mark'
+nmap <leader>mn :bnext<CR>
+nmap <leader>mp :bprevious<CR>
+
+Plugin 'minibufexpl.vim'
+
+Plugin 'gtags.vim'
+" cscope
+set cscopetag                  " 使用 cscope 作为 tags 命令
+set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
+
+" gtags
+let GtagsCscope_Auto_Load = 1
+let CtagsCscope_Auto_Map = 1
+let GtagsCscope_Quiet = 1
+
 call vundle#end()
 
 set encoding=utf-8
@@ -266,3 +289,61 @@ if has("autocmd")
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\|NOTICE\)')
   endif
 endif
+
+
+"################################################################
+"#  for gtags                                                   #     
+"################################################################
+au VimEnter * cs add GTAGS
+" au VimEnter * call VimEnterCallback()
+au BufAdd *.[ch] call FindGtags(expand('<afile>'))
+au BufWritePost *.[ch] call UpdateGtags(expand('<afile>'))
+  
+function! FindFiles(pat, ...)
+     let path = ''
+     for str in a:000
+         let path .= str . ','
+     endfor
+  
+     if path == ''
+         let path = &path
+     endif
+  
+     echo 'finding...'
+     redraw
+     call append(line('$'), split(globpath(path, a:pat), '\n'))
+     echo 'finding...done!'
+     redraw
+endfunc
+  
+function! VimEnterCallback()
+     for f in argv()
+         if fnamemodify(f, ':e') != 'c' && fnamemodify(f, ':e') != 'h'
+             continue
+         endif
+  
+         call FindGtags(f)
+     endfor
+endfunc
+  
+function! FindGtags(f)
+     let dir = fnamemodify(a:f, ':p:h')
+     while 1
+         let tmp = dir . '/GTAGS'
+         if filereadable(tmp)
+			 echo tmp
+             exe 'cs add ' . tmp . ' ' . dir
+             break
+         elseif dir == '/'
+             break
+         endif
+  
+         let dir = fnamemodify(dir, ":h")
+     endwhile
+endfunc
+  
+function! UpdateGtags(f)
+     let dir = fnamemodify(a:f, ':p:h')
+     exe 'silent !cd ' . dir . ' && global -u &> /dev/null &'
+endfunction
+"################################################################
