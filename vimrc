@@ -8,6 +8,8 @@ nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 " 使用,w保存文件
 nmap <leader>w :w<CR>
+" 使用,q保存文件
+nmap <leader>q :q<CR>
 " 按,p用python执行当前文件
 nmap <leader>p :!python %<CR>
 " 按,m取消高亮搜索结果
@@ -225,7 +227,7 @@ set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 " python static syntax and style checker
@@ -235,7 +237,7 @@ let python_highlight_all=1
 
 " recent files
 Plugin 'mru.vim'
-nmap <cr> :MRU<cr>
+" nmap <cr> :MRU<cr>
 
 " Xdebug for php
 " for more info. https://www.github.com/vim-scripts/Xdebug
@@ -250,7 +252,7 @@ let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplMapWindowNavArrows = 1 
 let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplModSelTarget = 1
-let g:bufExplorerMaxHeight=30
+let g:miniBufExplMaxHeight=2
 " let g:miniBufExplorerMoreThanOne=0
 
 Plugin 'gtags.vim'
@@ -262,6 +264,12 @@ set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
 let GtagsCscope_Auto_Load = 1
 let CtagsCscope_Auto_Map = 1
 let GtagsCscope_Quiet = 1
+
+Plugin 'axiaoxin/vim-json-line-format'
+
+Plugin 'ctrlp.vim'
+
+Plugin 'ack.vim'
 
 call vundle#end()
 
