@@ -2,6 +2,7 @@
 let mapleader = ','
 let g:mapleader = ','
 
+" {{{ 常用功能leader映射
 " 使用,ev打开配置文件
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 " 按,sv重载配置文件
@@ -10,23 +11,37 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 nmap <leader>w :w<CR>
 " 使用,q保存文件
 nmap <leader>q :q<CR>
-" 按,p用python执行当前文件
-nmap <leader>p :!python %<CR>
 " 按,m取消高亮搜索结果
 nmap <silent> <leader>m :nohlsearch<CR>
 " 按,h进入16进制模式
 nmap <leader>h :%!xxd<CR>
 " 按,t进入文本模式
 nmap <leader>t :%!xxd -r<CR>
+" }}}
+" {{{ 注释折叠
+augroup ft_vim
+	autocmd!
+	autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
 
 " 在上下移动光标时，光标的上方或下方至少会保留显示的行数
 set scrolloff=7
 " 打开文件时，同时尝试utf-8和gbk编码
 set fencs=utf-8,gbk
+set encoding=utf-8
 
 " Go to home and end using capitalized directions
 noremap H ^
 noremap L $
+
+" 按,py用python执行当前文件
+nnoremap <silent> <leader>py :call PythonExec()<CR>
+" 按,sh用bash执行当前文件
+nnoremap <silent> <leader>sh :call ShellExec()<CR>
+" 按,sh用php执行当前文件
+nnoremap <silent> <leader>ph :call PhpExec()<CR>
+
 
 " 复制选中区到系统剪切板中
 vnoremap <leader>y "+y
@@ -64,19 +79,6 @@ colorscheme desert        " elflord ron peachpuff default 设置配色方案，v
 " detect file type
 filetype on
 filetype plugin on
-
-" NerdTree
-" autocmd VimEnter * NERDTree
-" let NERDTreeWinPos="right"
-" let NERDTreeShowBookmarks=1
-" map <F4> <ESC> :NERDTreeToggle<CR>
-
-" Tlist
-" let Tlist_Auto_Open=1
-" let Tlist_WinWidth=30
-" map <F3> <ESC> :TlistToggle <CR>
-
-" let Tlist_Auto_Update=1
 
 " If using a dark background within the editing area and syntax highlighting
 " turn on this option as well
@@ -133,150 +135,158 @@ imap <F7> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :Tli
 set tags=tags
 set tags+=./tags "add current directory's generated tags file
 
-
+" {{{ Plugin list
 set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
-Plugin 'gmarik/vundle'
+	Plugin 'gmarik/vundle'
+"	{{{ NerdTree
+	Plugin 'scrooloose/nerdtree'
+	autocmd VimEnter * NERDTree
+	let NERDTreeWinPos="right"
+	let NERDTreeShowBookmarks=1
+	let NERDTreeWinSize=30
+	wincmd w
+	autocmd VimEnter * wincmd w
+	nmap <leader>nf :NERDTreeFind<CR>
+	
+	" let NERDTreeDirArrowExpandable='+'
+	" let NERDTreeDirArrowCollapsible='-' 
+	map <F4> <ESC> :NERDTreeToggle<CR>
+"	}}}
+"	{{{ --java complete
+	" Plugin 'artur-shaik/vim-javacomplete2'
+	" autocmd FileType java setlocal omnifunc=javacomplete#Complete
+"	}}}
+"	{{{ vim-airline
+	Plugin 'bling/vim-airline'
+	set laststatus=2
+"	}}}
+"	{{{ tagbar
+	Plugin 'majutsushi/tagbar'
+	" for mac os
+	" let g:tagbar_ctags_bin='/usr/local/bin/ctags'            "ctags程序的路径
+	let g:tagbar_ctags_bin='ctags'            "ctags程序的路径
+	let g:tagbar_width=30                    "窗口宽度的设置
+	let g:tagbar_left = 1
+	map <F3> :Tagbar<CR>
+	"autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+	"如果是c语言的程序的话，tagbar自动开启
+"	}}}
+"	{{{ YouCompleteMe
+	Plugin 'Valloric/YouCompleteMe'
+	" 自动补全配置
+	set completeopt=longest,menu
+	"让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
+	autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+	"离开插入模式后自动关闭预览窗口
+	inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+	"回车即选中当前项
+	"上下左右键的行为 会显示其他信息
+	inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+	inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+	inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" :
+	"\<PageDown>"
+	inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" :
+	"\<PageUp>"
+	
+	"youcompleteme  默认tab  s-tab 和自动补全冲突
+	"let g:ycm_key_list_select_completion=['<c-n>']
+	let g:ycm_key_list_select_completion = ['<Down>']
+	"let g:ycm_key_list_previous_completion=['<c-p>']
+	let g:ycm_key_list_previous_completion = ['<Up>']
+	let g:ycm_confirm_extra_conf=0 "关闭加载.ycm_extra_conf.py提示
+	
+	let g:ycm_collect_identifiers_from_tags_files=1	" 开启 YCM 基于标签引擎
+	let g:ycm_min_num_of_chars_for_completion=2	"
+	" 从第2个键入字符就开始罗列匹配项
+	let g:ycm_cache_omnifunc=0	" 禁止缓存匹配项,每次都重新生成匹配项
+	let g:ycm_seed_identifiers_with_syntax=1	" 语法关键字补全
+	" nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>	
+	" force recomile with
+	" syntastic
+	" nnoremap <leader>lo :lopen<CR>	"open locationlist
+	" nnoremap <leader>lc :lclose<CR>	"close locationlist
+	inoremap <leader><leader> <C-x><C-o>
+	"在注释输入中也能补全
+	let g:ycm_complete_in_comments = 1
+	"在字符串输入中也能补全
+	let g:ycm_complete_in_strings = 1
+	"注释和字符串中的文字也会被收入补全
+	let g:ycm_collect_identifiers_from_comments_and_strings = 0
+	
+	nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR> 
+	" 跳转到定义处
+"	}}}
+"	{{{ dracula scheme
+	Plugin 'dracula/vim'
+"	}}}
+"	{{{ syntastic
+	Plugin 'scrooloose/syntastic'
+	set statusline+=%#warningmsg#
+	set statusline+=%{SyntasticStatuslineFlag()}
+	set statusline+=%*
 
-" NerdTree
-Plugin 'scrooloose/nerdtree'
-autocmd VimEnter * NERDTree
-let NERDTreeWinPos="right"
-let NERDTreeShowBookmarks=1
-let NERDTreeWinSize=30
-wincmd w
-autocmd VimEnter * wincmd w
-nmap <leader>nf :NERDTreeFind<CR>
-
-" let NERDTreeDirArrowExpandable='+'
-" let NERDTreeDirArrowCollapsible='-' 
-map <F4> <ESC> :NERDTreeToggle<CR>
-
-
-" java complete
-" Plugin 'artur-shaik/vim-javacomplete2'
-" autocmd FileType java setlocal omnifunc=javacomplete#Complete
-
-
-Plugin 'bling/vim-airline'
-set laststatus=2
-
-Plugin 'majutsushi/tagbar'
-" nmap <Leader>tb :TagbarToggle<CR>        "快捷键设置
-" for mac os
-" let g:tagbar_ctags_bin='/usr/local/bin/ctags'            "ctags程序的路径
-let g:tagbar_ctags_bin='ctags'            "ctags程序的路径
-let g:tagbar_width=30                    "窗口宽度的设置
-let g:tagbar_left = 1
-map <F3> :Tagbar<CR>
-"autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
-"如果是c语言的程序的话，tagbar自动开启
-
-Plugin 'Valloric/YouCompleteMe'
-" 自动补全配置
-set completeopt=longest,menu
-"让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-"离开插入模式后自动关闭预览窗口
-inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
-"回车即选中当前项
-"上下左右键的行为 会显示其他信息
-inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
-inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" :
-"\<PageDown>"
-inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" :
-"\<PageUp>"
-
-"youcompleteme  默认tab  s-tab 和自动补全冲突
-"let g:ycm_key_list_select_completion=['<c-n>']
-let g:ycm_key_list_select_completion = ['<Down>']
-"let g:ycm_key_list_previous_completion=['<c-p>']
-let g:ycm_key_list_previous_completion = ['<Up>']
-let g:ycm_confirm_extra_conf=0 "关闭加载.ycm_extra_conf.py提示
-
-let g:ycm_collect_identifiers_from_tags_files=1	" 开启 YCM 基于标签引擎
-let g:ycm_min_num_of_chars_for_completion=2	"
-" 从第2个键入字符就开始罗列匹配项
-let g:ycm_cache_omnifunc=0	" 禁止缓存匹配项,每次都重新生成匹配项
-let g:ycm_seed_identifiers_with_syntax=1	" 语法关键字补全
-" nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>	
-" force recomile with
-" syntastic
-" nnoremap <leader>lo :lopen<CR>	"open locationlist
-" nnoremap <leader>lc :lclose<CR>	"close locationlist
-inoremap <leader><leader> <C-x><C-o>
-"在注释输入中也能补全
-let g:ycm_complete_in_comments = 1
-"在字符串输入中也能补全
-let g:ycm_complete_in_strings = 1
-"注释和字符串中的文字也会被收入补全
-let g:ycm_collect_identifiers_from_comments_and_strings = 0
-
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR> 
-" 跳转到定义处
-
-" dracula scheme
-Plugin 'dracula/vim'
-
-" syntastic 语法检查
-Plugin 'scrooloose/syntastic'
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
-" python static syntax and style checker
-Plugin 'nvie/vim-flake8'
-
-let python_highlight_all=1
-
-" recent files
-Plugin 'mru.vim'
-" nmap <cr> :MRU<cr>
-
-" Xdebug for php
-" for more info. https://www.github.com/vim-scripts/Xdebug
-Plugin 'joonty/vim-xdebug.git'
-
-Plugin 'Visual-Mark'
-nmap <leader>mn :bnext<CR>
-nmap <leader>mp :bprevious<CR>
-
-Plugin 'minibufexpl.vim'
-let g:miniBufExplMapWindowNavVim = 1 
-let g:miniBufExplMapWindowNavArrows = 1 
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplModSelTarget = 1
-let g:miniBufExplMaxHeight=2
-" let g:miniBufExplorerMoreThanOne=0
-
-Plugin 'gtags.vim'
-" cscope
-set cscopetag                  " 使用 cscope 作为 tags 命令
-set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
-
-" gtags
-let GtagsCscope_Auto_Load = 1
-let CtagsCscope_Auto_Map = 1
-let GtagsCscope_Quiet = 1
-
-Plugin 'axiaoxin/vim-json-line-format'
-
-Plugin 'ctrlp.vim'
-
-Plugin 'ack.vim'
-
+	let g:syntastic_always_populate_loc_list = 1
+	let g:syntastic_auto_loc_list = 1
+	let g:syntastic_check_on_open = 0
+	let g:syntastic_check_on_wq = 0
+"	}}}
+"	{{{ vim-flake8: python static syntax and style checker
+	Plugin 'nvie/vim-flake8'
+	let python_highlight_all=1
+"	}}}
+"	{{{ mru: recent files
+	Plugin 'mru.vim'
+	" nmap <cr> :MRU<cr>
+"	}}}
+"	{{{ Xdebug for php
+	Plugin 'joonty/vim-xdebug.git'
+"	}}}
+"	{{{ Visual-Mark
+	Plugin 'Visual-Mark'
+	nmap <leader>mn :bnext<CR>
+	nmap <leader>mp :bprevious<CR>
+"	}}}
+"	{{{	minibufexpl
+	Plugin 'minibufexpl.vim'
+	let g:miniBufExplMapWindowNavVim = 1 
+	let g:miniBufExplMapWindowNavArrows = 1 
+	let g:miniBufExplMapCTabSwitchBufs = 1
+	let g:miniBufExplModSelTarget = 1
+	let g:miniBufExplMaxHeight=2
+	" let g:miniBufExplorerMoreThanOne=0
+"	}}}
+"	{{{ gtags
+	Plugin 'gtags.vim'
+	" cscope
+	set cscopetag                  " 使用 cscope 作为 tags 命令
+	set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
+	
+	" gtags
+	let GtagsCscope_Auto_Load = 1
+	let CtagsCscope_Auto_Map = 1
+	let GtagsCscope_Quiet = 1
+"	}}}
+"	{{{ vim-json-line-format
+	Plugin 'axiaoxin/vim-json-line-format'
+"	}}}
+"	{{{	ctrlp
+	Plugin 'ctrlp.vim'
+"	}}}
+"	{{{ ack
+	Plugin 'ack.vim'
+"	}}}
+"	{{{ a.vim
+	Plugin 'a.vim'
+"	}}}
+"	{{{ EasyMotion
+	Plugin 'EasyMotion'
+	let g:EasyMotion_leader_key = '\'
+"	}}}
 call vundle#end()
+" }}}
 
-set encoding=utf-8
-
-
-" 定义函数AutoSetFileHead，自动插入文件头
+" {{{ 定义函数AutoSetFileHead，自动插入文件头
 autocmd BufNewFile *.sh,*.py exec ":call AutoSetFileHead()"
 function! AutoSetFileHead()
     "如果文件类型为.sh文件
@@ -294,8 +304,8 @@ function! AutoSetFileHead()
     normal o
     normal o
 endfunc
-
-" 设置可以高亮的关键字
+" }}}
+" {{{ 设置可以高亮的关键字
 if has("autocmd")
   " Highlight TODO, FIXME, NOTE, etc.
   if v:version > 701
@@ -303,16 +313,60 @@ if has("autocmd")
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\|NOTICE\)')
   endif
 endif
+" }}}
+" {{{ execute shell script in vim
+function! ShellExec()
+	silent !clear
+	let ret = system("bash" . " " . bufname("%") . " 2>&1")
+	call ChooseBuf("__Bash_Ret__")
+	normal! ggdG
+	setlocal buftype=nofile
 
+	call append(0, split(ret, '\v\n'))
+	:redraw!
+endfunction
+" }}}
+" {{{ 选择一个命名的缓冲区
+function! ChooseBuf(buf_name)
+	let bnr = bufwinnr(a:buf_name)
+	if bnr > 0
+		:exe bnr . "wincmd w"
+	else
+		10split a:buf_name
+	endif
+endfunction
+" }}}
+" {{{ execute python in vim
+function! PythonExec()
+	silent !clear
+	let ret = system("python" . " " . bufname("%") . " 2>&1")
+	call ChooseBuf("__Python_Ret__")
+	normal! ggdG
+	setlocal buftype=nofile
 
-"################################################################
-"#  for gtags                                                   #     
-"################################################################
+	call append(0, split(ret, '\v\n'))
+	:redraw!
+endfunction
+" }}}
+" {{{ execute php in vim
+function! PhpExec()
+    silent !clear
+    let ret = system("php" . " " . bufname("%") . " 2>&1")
+	call ChooseBuf("__PHP_Ret__")
+    normal! ggdG
+    setlocal buftype=nofile
+
+    call append(0, split(ret, '\v\n'))
+    :redraw!
+endfunction
+" }}}
+" {{{ for gtags 
 au VimEnter * cs add GTAGS
 " au VimEnter * call VimEnterCallback()
 au BufAdd *.[ch] call FindGtags(expand('<afile>'))
 au BufWritePost *.[ch] call UpdateGtags(expand('<afile>'))
   
+" {{{ FindFiles
 function! FindFiles(pat, ...)
      let path = ''
      for str in a:000
@@ -329,7 +383,8 @@ function! FindFiles(pat, ...)
      echo 'finding...done!'
      redraw
 endfunc
-  
+" }}}
+" {{{ VimEnterCallback
 function! VimEnterCallback()
      for f in argv()
          if fnamemodify(f, ':e') != 'c' && fnamemodify(f, ':e') != 'h'
@@ -339,7 +394,8 @@ function! VimEnterCallback()
          call FindGtags(f)
      endfor
 endfunc
-  
+" }}}
+" {{{ FindGtags  
 function! FindGtags(f)
      let dir = fnamemodify(a:f, ':p:h')
      while 1
@@ -355,9 +411,11 @@ function! FindGtags(f)
          let dir = fnamemodify(dir, ":h")
      endwhile
 endfunc
-  
+" }}}
+" {{{ UpdateGtags 
 function! UpdateGtags(f)
      let dir = fnamemodify(a:f, ':p:h')
      exe 'silent !cd ' . dir . ' && global -u &> /dev/null &'
 endfunction
-"################################################################
+" }}}
+" }}} ################################################################
