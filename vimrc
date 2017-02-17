@@ -4,19 +4,32 @@ let g:mapleader = ','
 
 " {{{ 常用功能leader映射
 " 使用,ev打开配置文件
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nnoremap <silent> <leader>ev :vsp $MYVIMRC<CR>
 " 按,sv重载配置文件
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
+nnoremap <silent> <leader>sv :so $MYVIMRC<CR>
 " 使用,w保存文件
-nmap <leader>w :w<CR>
+nnoremap <leader>w :w<CR>
 " 使用,q保存文件
-nmap <leader>q :q<CR>
+nnoremap <leader>q :q<CR>
 " 按,m取消高亮搜索结果
-nmap <silent> <leader>m :nohlsearch<CR>
+nnoremap <silent> <leader>m :nohlsearch<CR>
 " 按,h进入16进制模式
-nmap <leader>h :%!xxd<CR>
+nnoremap <leader>h :%!xxd<CR>
 " 按,t进入文本模式
-nmap <leader>t :%!xxd -r<CR>
+nnoremap <leader>t :%!xxd -r<CR>
+
+nnoremap - ddp
+nnoremap _ ddkP
+nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
+nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lel
+vnoremap <leader>" <esc>`<i"<esc>`>a"<esc>
+vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
+
+" auto comment
+autocmd FileType python nnoremap <buffer> <localleader>c I#<space><esc>
+autocmd FileType shell nnoremap <buffer> <localleader>c I#<space><esc>
+autocmd FileType php nnoremap <buffer> <localleader>c I//<esc>
+
 " }}}
 " {{{ 注释折叠
 augroup ft_vim
@@ -53,10 +66,13 @@ nnoremap <C-y> 2<C-y>
 " remap U to <C-r> for easier redo
 nnoremap U <C-r>
 
-" 缩进规则
-autocmd filetype make set noexpandtab
-autocmd FileType * set tabstop=4|set shiftwidth=4|set noexpandtab
-autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
+" 缩进规则 expendtab {{{
+augroup expandtab
+	autocmd filetype make set noexpandtab
+	autocmd FileType * set tabstop=4|set shiftwidth=4|set noexpandtab
+	autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
+augroup END
+" }}}
 
 " This line should not be removed as it ensures that various options are
 " properly set to work with the Vim-related packages available in Debian.
@@ -130,13 +146,17 @@ set hlsearch
 
 
 " 按下F7重新生成tag文件，并更新taglist
-map <F7> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
-imap <F7> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
+noremap <F7> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
+inoremap <F7> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
 set tags=tags
 set tags+=./tags "add current directory's generated tags file
 
 " {{{ Plugin list
-set rtp+=~/.vim/bundle/Vundle.vim/
+if has('mac')
+	set rtp+=~/.vim/bundle/vundle/Vundle.vim/
+else
+	set rtp+=~/.vim/bundle/Vundle.vim/
+endif
 call vundle#begin()
 	Plugin 'gmarik/vundle'
 "	{{{ NerdTree
