@@ -352,7 +352,7 @@ function! ChooseBuf(buf_name)
 	if bnr > 0
 		:exe bnr . "wincmd w"
 	else
-		10split a:buf_name
+		silent execute '10split' . a:buf_name
 	endif
 endfunction
 " }}}
