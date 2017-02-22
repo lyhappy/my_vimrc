@@ -260,7 +260,11 @@ call vundle#begin()
 	" nmap <cr> :MRU<cr>
 "	}}}
 "	{{{ Xdebug for php
-	Plugin 'joonty/vim-xdebug.git'
+	if has('mac')
+		echom "no xdebug on mac"
+	else
+		Plugin 'joonty/vim-xdebug.git'
+	endif
 "	}}}
 "	{{{ Visual-Mark
 	Plugin 'Visual-Mark'
