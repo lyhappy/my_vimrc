@@ -9,8 +9,8 @@ nnoremap <silent> <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <silent> <leader>sv :so $MYVIMRC<CR>
 " 使用,w保存文件
 nnoremap <leader>w :w<CR>
-" 使用,q保存文件
-nnoremap <leader>q :q<CR>
+" 使用,q关闭窗口
+nnoremap q :q<CR>
 " 按,m取消高亮搜索结果
 nnoremap <silent> <leader>m :nohlsearch<CR>
 " 按,h进入16进制模式
@@ -28,7 +28,7 @@ vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
 " auto comment
 autocmd FileType python nnoremap <buffer> <localleader>c I#<space><esc>
 autocmd FileType shell nnoremap <buffer> <localleader>c I#<space><esc>
-autocmd FileType php nnoremap <buffer> <localleader>c I//<esc>
+autocmd FileType php nnoremap <buffer> <localleader>c I//<space><esc>
 
 " }}}
 " {{{ 注释折叠
@@ -49,12 +49,17 @@ noremap H ^
 noremap L $
 
 " 按,py用python执行当前文件
-nnoremap <silent> <leader>py :call PythonExec()<CR>
+autocmd FileType python nnoremap <silent> <leader>py :call PythonExec()<CR>
 " 按,sh用bash执行当前文件
 nnoremap <silent> <leader>sh :call ShellExec()<CR>
-" 按,sh用php执行当前文件
-nnoremap <silent> <leader>ph :call PhpExec()<CR>
+" 按,ph用php执行当前文件
+autocmd FileType php nnoremap <silent> <leader>ph :call PhpExec()<CR> 
 
+" normal 模式下，gf跳转到php的function 声明行
+autocmd FileType php nnoremap <silent><buffer><leader>gf :call GotoPhpFuncDef()<CR>
+
+autocmd FileType java nnoremap <silent><buffer><leader>jc :call JavaCompile()<CR>
+autocmd FileType java nnoremap <silent><buffer><leader>jr :call JavaRun()<CR>
 
 " 复制选中区到系统剪切板中
 vnoremap <leader>y "+y
@@ -268,14 +273,17 @@ call vundle#begin()
 "	}}}
 "	{{{ Visual-Mark
 	Plugin 'Visual-Mark'
-	nmap <leader>mn :bnext<CR>
-	nmap <leader>mp :bprevious<CR>
+	nnoremap <leader>mn :bnext<CR>
+	nnoremap <leader>mp :bprevious<CR>
 "	}}}
 "	{{{	minibufexpl
 	Plugin 'minibufexpl.vim'
 	let g:miniBufExplMapWindowNavVim = 1 
 	let g:miniBufExplMapWindowNavArrows = 1 
-	let g:miniBufExplMapCTabSwitchBufs = 1
+	let g:miniBufExplMapCTabSwitchBufs = 0
+	" <C-TAB> and <C-S-TAB> 多被终端应用占用，使用tn和tp实现buf循环切换
+	noremap <silent>tn <ESC>:MBEbn<CR>
+	noremap <silent>tp <ESC>:MBEbp<CR>
 	let g:miniBufExplModSelTarget = 1
 	let g:miniBufExplMaxHeight=2
 	" let g:miniBufExplorerMoreThanOne=0
@@ -443,3 +451,38 @@ function! UpdateGtags(f)
 endfunction
 " }}}
 " }}} ################################################################
+" funcstions
+" 
+" GotoPhpFuncDef goto function definion in php {{{
+function!  GotoPhpFuncDef()
+	" echom "GotoPhpFuncDef"
+	execute "normal! ?function\<CR>"
+endfunction	
+" }}}
+" {{{ execute javac in vim
+function! JavaCompile()
+    silent !clear
+    let ret = system("javac" . " " . bufname("%") . " 2>&1")
+	call ChooseBuf("__Java_Ret__")
+    normal! ggdG
+    setlocal buftype=nofile
+
+    call append(0, split(ret, '\v\n'))
+    :redraw!
+endfunction
+" }}}
+" {{{ execute java in vim
+function! JavaRun()
+    silent !clear
+	let bn = bufname("%")
+	let fn = split(bn, '\.')[0]
+    let ret = system("java" . " " . fn . " 2>&1")
+	call ChooseBuf("__Java_Ret__")
+    normal! ggdG
+    setlocal buftype=nofile
+
+    call append(0, split(ret, '\v\n'))
+    :redraw!
+endfunction
+" }}}
+
