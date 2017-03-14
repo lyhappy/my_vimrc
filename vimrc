@@ -266,7 +266,7 @@ call vundle#begin()
 "	}}}
 "	{{{ Xdebug for php
 	if has('mac')
-		echom "no xdebug on mac"
+		silent! echo "no xdebug on mac"
 	else
 		Plugin 'joonty/vim-xdebug.git'
 	endif
