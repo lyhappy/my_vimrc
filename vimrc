@@ -54,6 +54,8 @@ autocmd FileType python nnoremap <silent> <leader>py :call PythonExec()<CR>
 nnoremap <silent> <leader>sh :call ShellExec()<CR>
 " 按,ph用php执行当前文件
 autocmd FileType php nnoremap <silent> <leader>ph :call PhpExec()<CR> 
+" 按,yd用youdao词典翻译当前单词
+nnoremap <leader>yd :let a=expand("<cword>")<Bar>exec '!echo ' .a. '&dicDoc ck ' .a<CR>
 
 " normal 模式下，gf跳转到php的function 声明行
 autocmd FileType php nnoremap <silent><buffer><leader>gf :call GotoPhpFuncDef()<CR>
@@ -315,6 +317,7 @@ call vundle#begin()
 	Plugin 'EasyMotion'
 	let g:EasyMotion_leader_key = '\'
 "	}}}
+	Plugin 'Lynx-Offline-Documentation-Browser'
 call vundle#end()
 " }}}
 
