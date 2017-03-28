@@ -9,6 +9,7 @@ nnoremap <silent> <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <silent> <leader>sv :so $MYVIMRC<CR>
 " 使用,w保存文件
 nnoremap <leader>w :w<CR>
+inoremap <leader>w <esc>:w<CR>
 " 使用,q保存文件
 nnoremap <leader>q :q<CR>
 " 按,m取消高亮搜索结果
@@ -307,6 +308,7 @@ call vundle#begin()
 	Plugin 'EasyMotion'
 	let g:EasyMotion_leader_key = '\'
 "	}}}
+	Plugin 'Lynx-Offline-Documentation-Browser'
 call vundle#end()
 " }}}
 
