@@ -12,7 +12,7 @@ nnoremap <leader>w :w<CR>
 inoremap <leader>w <esc>:w<CR>
 " 使用,q关闭窗口
 nnoremap <leader>q :q<CR>
-inoremap <leader>q :q<CR>
+inoremap <leader>q <esc>:q<CR>
 " 按,m取消高亮搜索结果
 nnoremap <silent> <leader>m :nohlsearch<CR>
 " 按,h进入16进制模式
