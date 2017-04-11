@@ -66,7 +66,12 @@ autocmd FileType java nnoremap <silent><buffer><leader>jc :call JavaCompile()<CR
 autocmd FileType java nnoremap <silent><buffer><leader>jr :call JavaRun()<CR>
 
 " 复制选中区到系统剪切板中
-vnoremap <leader>y "+y
+if has('mac')
+	vnoremap <leader>y "+y
+else
+	vnoremap <leader>y "9y
+	cnoremap <c-v> <c-r>9
+endif
 
 " 滚动Speed up scrolling of the viewport slightly
 nnoremap <C-e> 2<C-e>
