@@ -20,6 +20,11 @@ nnoremap <leader>h :%!xxd<CR>
 " 按,t进入文本模式
 nnoremap <leader>t :%!xxd -r<CR>
 
+nnoremap <leader>vs= :vertical resize +10<CR>
+nnoremap <leader>vs- :vertical resize -10<CR>
+
+inoremap <leader>n <esc>
+
 nnoremap - ddp
 nnoremap _ ddkP
 nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
@@ -324,6 +329,9 @@ call vundle#begin()
 	Plugin 'EasyMotion'
 	let g:EasyMotion_leader_key = '\'
 "	}}}
+"	{{{ java syntax
+	" Plugin 'Java-Syntax-and-Folding'
+"	}}}
 	Plugin 'Lynx-Offline-Documentation-Browser'
 call vundle#end()
 " }}}
@@ -496,3 +504,8 @@ function! JavaRun()
 endfunction
 " }}}
 
+" {{{ fold java import
+function! FoldJavaImport()
+	execute "normal! gg/import\<cr>V?import\<cr>jzf"
+endfunction
+" }}}
