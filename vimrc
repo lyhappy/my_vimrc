@@ -23,7 +23,7 @@ nnoremap <leader>t :%!xxd -r<CR>
 nnoremap <leader>vs= :vertical resize +10<CR>
 nnoremap <leader>vs- :vertical resize -10<CR>
 
-inoremap <leader>n <esc>
+inoremap <leader>n <esc>l
 
 nnoremap - ddp
 nnoremap _ ddkP
@@ -44,6 +44,12 @@ augroup ft_vim
 	autocmd!
 	autocmd FileType vim setlocal foldmethod=marker
 augroup END
+" }}}
+
+" {{{ for markdown
+autocmd FileType markdown nnoremap <leader>br A<br><esc><cr>
+autocmd FileType markdown nnoremap <leader>i A \|<esc><cr>
+autocmd FileType markdown nnoremap <leader>` viw<esc>a`<esc>hbi`<esc>lel
 " }}}
 
 " 在上下移动光标时，光标的上方或下方至少会保留显示的行数
