@@ -36,6 +36,7 @@ vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
 autocmd FileType python nnoremap <buffer> <localleader>c I#<space><esc>
 autocmd FileType shell nnoremap <buffer> <localleader>c I#<space><esc>
 autocmd FileType php nnoremap <buffer> <localleader>c I//<space><esc>
+autocmd FileType c nnoremap <buffer> <localleader>c I//<space><esc>
 
 " }}}
 " {{{ 注释折叠
@@ -50,6 +51,8 @@ set scrolloff=7
 " 打开文件时，同时尝试utf-8和gbk编码
 set fencs=utf-8,gbk
 set encoding=utf-8
+
+set paste
 
 " Go to home and end using capitalized directions
 noremap H ^
