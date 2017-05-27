@@ -48,7 +48,7 @@ augroup END
 
 " {{{ for markdown
 autocmd FileType markdown nnoremap <leader>br A<br><esc><cr>
-autocmd FileType markdown nnoremap <leader>i A \|<esc><cr>
+autocmd FileType markdown nnoremap <leader>i A \|<esc>
 autocmd FileType markdown nnoremap <leader>` viw<esc>a`<esc>hbi`<esc>lel
 " }}}
 
@@ -58,7 +58,8 @@ set scrolloff=7
 set fencs=utf-8,gbk
 set encoding=utf-8
 
-set paste
+noremap <F10> :set paste<CR>
+noremap <F9> :set nopaste<CR>
 
 " Go to home and end using capitalized directions
 noremap H ^
