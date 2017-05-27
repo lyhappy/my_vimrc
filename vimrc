@@ -58,8 +58,7 @@ set scrolloff=7
 set fencs=utf-8,gbk
 set encoding=utf-8
 
-noremap <F10> :set paste<CR>
-noremap <F9> :set nopaste<CR>
+noremap <F10> :call PasteToggle()<cr>
 
 " Go to home and end using capitalized directions
 noremap H ^
@@ -519,3 +518,17 @@ function! FoldJavaImport()
 	execute "normal! gg/import\<cr>V?import\<cr>jzf"
 endfunction
 " }}}
+
+if !exists('g:paste_toggle')
+	let g:_paste_toggle=0
+endif
+
+function! PasteToggle()
+	if g:_paste_toggle == 0
+		let g:_paste_toggle=1
+		setlocal paste
+	else
+		let g:_paste_toggle=0
+		setlocal nopaste
+	endif
+endfunction
