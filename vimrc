@@ -73,6 +73,9 @@ autocmd FileType php nnoremap <silent> <leader>ph :call PhpExec()<CR>
 " 按,yd用youdao词典翻译当前单词
 nnoremap <leader>yd :let a=expand("<cword>")<Bar>exec '!echo ' .a. '&dicDoc ck ' .a<CR>
 
+" 按,du 解码unicode
+vnoremap <leader>du :'<,'>call DeUnicode()<cr>
+
 " normal 模式下，gf跳转到php的function 声明行
 autocmd FileType php nnoremap <silent><buffer><leader>gf :call GotoPhpFuncDef()<CR>
 
@@ -93,6 +96,19 @@ nnoremap <C-y> 2<C-y>
 
 " remap U to <C-r> for easier redo
 nnoremap U <C-r>
+
+" {{{ shortcut for ack
+function! JavaAck(args)
+    let grepprg_bak=&grepprg
+    exec "set grepprg=" . g:ackprg
+    execute "silent! grep --type=java " . a:args
+    botright copen
+    let &grepprg=grepprg_bak
+    exec "redraw!"
+endfunction
+
+command! -nargs=* -complete=file JAck call JavaAck(<q-args>)
+" }}}
 
 " 缩进规则 expendtab {{{
 augroup expandtab
@@ -479,7 +495,20 @@ function! UpdateGtags(f)
 endfunction
 " }}}
 " }}} ################################################################
+
 " funcstions
+function! DeUnicode()
+	let [lnum1, col1] = getpos("'<")[1:2]
+	let [lnum2, col2] = getpos("'>")[1:2]
+	let lines = getline(lnum1, lnum2)
+	let lines[-1] = lines[-1][: col2 - 1]
+	let lines[0] = lines[0][col1 - 1:]
+  
+	let ustr = join(lines, "\n")
+
+	exec '!deunicode "' . ustr .'"'
+
+endfunction
 " 
 " GotoPhpFuncDef goto function definion in php {{{
 function!  GotoPhpFuncDef()
@@ -520,6 +549,7 @@ function! FoldJavaImport()
 endfunction
 " }}}
 
+" {{{ paste toggle
 if !exists('g:paste_toggle')
 	let g:_paste_toggle=0
 endif
@@ -533,3 +563,4 @@ function! PasteToggle()
 		setlocal nopaste
 	endif
 endfunction
+" }}}
