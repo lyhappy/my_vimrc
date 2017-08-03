@@ -342,6 +342,7 @@ call vundle#begin()
 	" Plugin 'Java-Syntax-and-Folding'
 "	}}}
 	Plugin 'Lynx-Offline-Documentation-Browser'
+	Plugin 'vim-ruby'
 call vundle#end()
 " }}}
 
