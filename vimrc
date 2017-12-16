@@ -73,6 +73,8 @@ autocmd FileType php nnoremap <silent> <leader>ph :call PhpExec()<CR>
 " 按,yd用youdao词典翻译当前单词
 nnoremap <leader>yd :let a=expand("<cword>")<Bar>exec '!echo ' .a. '&dicDoc ck ' .a<CR>
 
+nnoremap gl :call GitLog()<CR>
+
 " 按,du 解码unicode
 vnoremap <leader>du :'<,'>call DeUnicode()<cr>
 
@@ -110,11 +112,14 @@ endfunction
 command! -nargs=* -complete=file JAck call JavaAck(<q-args>)
 " }}}
 
+
 " 缩进规则 expendtab {{{
 augroup expandtab
 	autocmd filetype make set noexpandtab
 	autocmd FileType * set tabstop=4|set shiftwidth=4|set noexpandtab
 	autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
+	autocmd Filetype html setlocal ts=2 sts=2 sw=2
+	autocmd Filetype javascript setlocal ts=4 sts=4 sw=4 | set expandtab
 augroup END
 " }}}
 
@@ -215,7 +220,7 @@ call vundle#begin()
 	
 	" let NERDTreeDirArrowExpandable='+'
 	" let NERDTreeDirArrowCollapsible='-' 
-	map <F4> <ESC> :NERDTreeToggle<CR>
+	map <F4> <ESC> :NERDTree<CR>
 "	}}}
 "	{{{ --java complete
 	" Plugin 'artur-shaik/vim-javacomplete2'
@@ -345,7 +350,7 @@ call vundle#begin()
 	Plugin 'ctrlp.vim'
 "	}}}
 "	{{{ ack
-	Plugin 'ack.vim'
+	Plugin 'mileszs/ack.vim'
 "	}}}
 "	{{{ a.vim
 	Plugin 'a.vim'
@@ -358,6 +363,13 @@ call vundle#begin()
 	" Plugin 'Java-Syntax-and-Folding'
 "	}}}
 	Plugin 'Lynx-Offline-Documentation-Browser'
+
+	" Plugin 'pangloss/vim-javascript'
+	" let javascript_enable_domhtmlcss = 1
+	Plugin 'JavaScript-Indent'
+	Plugin 'posva/vim-vue'
+		au BufNewFile,BufRead *.vue setf vue
+		autocmd FileType vue syntax sync fromstart
 call vundle#end()
 " }}}
 
@@ -563,3 +575,12 @@ function! PasteToggle()
 	endif
 endfunction
 " }}}
+
+function! GitLog()
+	let bn = bufname("%")
+	execute "!git lg " . bn
+endfunction
+ 
+highlight ColorColumn ctermbg=235 guibg=#2c2d27
+let &colorcolumn="100"
+
