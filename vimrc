@@ -23,6 +23,9 @@ nnoremap <leader>t :%!xxd -r<CR>
 nnoremap <leader>vs= :vertical resize +10<CR>
 nnoremap <leader>vs- :vertical resize -10<CR>
 
+" jump to tagbar
+nnoremap <leader>jt :TagbarOpen j<CR>
+
 inoremap <leader>n <esc>l
 
 nnoremap - ddp
@@ -75,6 +78,10 @@ nnoremap <leader>yd :let a=expand("<cword>")<Bar>exec '!echo ' .a. '&dicDoc ck '
 
 " 按,du 解码unicode
 vnoremap <leader>du :'<,'>call DeUnicode()<cr>
+
+" 按,gU 当前word变为大写
+nnoremap <leader>u viwgU
+nnoremap <leader>l viwgu
 
 " normal 模式下，gf跳转到php的function 声明行
 autocmd FileType php nnoremap <silent><buffer><leader>gf :call GotoPhpFuncDef()<CR>
@@ -190,17 +197,17 @@ set hlsearch
 
 
 " 按下F7重新生成tag文件，并更新taglist
-noremap <F7> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
-inoremap <F7> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
-set tags=tags
-set tags+=./tags "add current directory's generated tags file
+" noremap <F7> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
+" inoremap <F7> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR> :TlistUpdate<CR>
+" set tags=tags
+" set tags+=./tags "add current directory's generated tags file
 
 " {{{ Plugin list
-if has('mac')
-	set rtp+=~/.vim/bundle/vundle/Vundle.vim/
-else
-	set rtp+=~/.vim/bundle/Vundle.vim/
-endif
+" if has('mac')
+	set rtp+=~/.vim/bundle/vundle/Vundle.Vim
+" else
+"	set rtp+=~/.vim/bundle/Vundle.vim/
+" endif
 call vundle#begin()
 	Plugin 'gmarik/vundle'
 "	{{{ NerdTree
@@ -238,6 +245,7 @@ call vundle#begin()
 "	}}}
 "	{{{ YouCompleteMe
 	Plugin 'Valloric/YouCompleteMe'
+	let g:ycm_server_python_interpreter='/usr/bin/python'
 	" 自动补全配置
 	set completeopt=longest,menu
 	"让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
@@ -339,7 +347,7 @@ call vundle#begin()
 	let GtagsCscope_Quiet = 1
 "	}}}
 "	{{{ vim-json-line-format
-	Plugin 'axiaoxin/vim-json-line-format'
+"	Plugin 'axiaoxin/vim-json-line-format'
 "	}}}
 "	{{{	ctrlp
 	Plugin 'ctrlp.vim'
@@ -358,7 +366,9 @@ call vundle#begin()
 	" Plugin 'Java-Syntax-and-Folding'
 "	}}}
 	Plugin 'Lynx-Offline-Documentation-Browser'
-	Plugin 'vim-ruby'
+"	Plugin 'vim-ruby'
+"	Plugin 'python_fold'
+	Plugin 'tmhedberg/SimpylFold'
 call vundle#end()
 " }}}
 
