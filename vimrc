@@ -5,9 +5,9 @@ let g:mapleader = ','
 syntax enable
 set nocompatible
 set autowrite
-set tabstop=4           " 设置制表符(tab键)的宽度
-set softtabstop=4       " 设置软制表符的宽度
-set shiftwidth=4        " (自动) 缩进使用的4个空格
+set tabstop=2           " 设置制表符(tab键)的宽度
+set softtabstop=2       " 设置软制表符的宽度
+set shiftwidth=2        " (自动) 缩进使用的4个空格
 set expandtab           " 将tab键展开为空格
 set hlsearch            " 高亮搜索匹配结果
 set incsearch           " 输入字符串就显示匹配点
@@ -27,26 +27,28 @@ set mouse=a             " Enable mouse usage (all modes)    "使用鼠标
 set whichwrap=b,s,<,>,[,]   " 光标从行首和行末时可以跳到另一行去
 set showcmd             " 命令行显示输入的命令
 set showmode            " 命令行显示vim当前模式
-set term=xterm-256color
+set term=screen-256color-italic
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
 
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
+" highlight ColorColumn ctermbg=235 guibg=#2c2d27
 let &colorcolumn="100"
 syntax on
 
 " colors desert
-colors dracula
 
 filetype on
 filetype plugin on
 
 " 缩进规则 expendtab {{{
 augroup expandtab
-    autocmd filetype make set noexpandtab
-    autocmd FileType * set ts=4 | set sw=4 | set noexpandtab
-    autocmd FileType python set ts=4 | set sw=4 | set expandtab
-    autocmd Filetype html setlocal ts=4 sts=4 sw=4 | set expandtab
-    autocmd Filetype javascript setlocal ts=4 sts=4 sw=4 | set expandtab
-    autocmd Filetype vue setlocal ts=4 sts=4 sw=4 | set expandtab
+  autocmd filetype make set noexpandtab
+  autocmd FileType * set ts=2 sts=2 sw=2 | set expandtab
+  autocmd FileType python set ts=4 | set sw=4 | set expandtab
+  autocmd Filetype html setlocal ts=4 sts=4 sw=4 | set expandtab
+  autocmd Filetype javascript setlocal ts=4 sts=4 sw=4 | set expandtab
+  autocmd Filetype vue setlocal ts=4 sts=4 sw=4 | set expandtab
 augroup END
 " }}}
 
@@ -100,10 +102,10 @@ inoremap <leader>n <esc>
 
 " 复制选中区到系统剪切板中
 if has('mac')
-    vnoremap <leader>y "+y
+  vnoremap <leader>y "+y
 else
-    vnoremap <leader>y "9y
-    cnoremap <c-v> <c-r>9
+  vnoremap <leader>y "9y
+  cnoremap <c-v> <c-r>9
 endif
 
 " {{{ use vim-plug manage plugins
@@ -116,54 +118,55 @@ endif
 
 " {{{ plugin list
 call plug#begin('~/.vim/plugged')
-    " {{{ NERDTree
-    Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-		" set runtimepath+=~/.vim/plugged/nerdtree
-		" so ~/.vim/plugged/nerdtree/autoload/nerdtree.vim
-        let NERDTreeWinPos='left'
-        let NERDTreeShowBookmarks=1
-		let NERDTreeWinSize=30
-		let g:NERDTreeDirArrowExpandable = '▸'
-		let g:NERDTreeDirArrowCollapsible = '▾'
-		nnoremap <leader>nf :NERDTreeFind<CR>
-        nnoremap <F4> :NERDTreeToggle<CR>
-        nnoremap <leader>k :NERDTree<CR>
+  " {{{ dracula scheme
+  Plug 'dracula/vim', { 'as': 'dracula' }
+  " }}}
+  " {{{ vim-airline
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  " let g:airline_theme='atomic'
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline_powerline_fonts = 1
+    set laststatus=2
+  " }}}
+  " {{{ ale
+  Plug 'w0rp/ale'
+  let g:ale_fixers = {
+        \   'javascript': ['eslint'],
+        \   'vue': ['eslint'],
+        \}
+  " }}}
 
-    Plug 'Xuyuanp/nerdtree-git-plugin', { 'on':  'NERDTreeToggle' }
-        let g:NERDTreeIndicatorMapCustom = {
-            \ "Modified"  : "✹",
-            \ "Staged"    : "✚",
-            \ "Untracked" : "✭",
-            \ "Renamed"   : "➜",
-            \ "Unmerged"  : "═",
-            \ "Deleted"   : "✖",
-            \ "Dirty"     : "✗",
-            \ "Clean"     : "✔︎",
-            \ 'Ignored'   : '☒',
-            \ "Unknown"   : "?"
-            \ }
-    " }}}
+  " {{{ NERDTree
+  Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+    set runtimepath+=~/.vim/plugged/nerdtree
+    so ~/.vim/plugged/nerdtree/autoload/nerdtree.vim
+    let NERDTreeWinPos='left'
+    let NERDTreeShowBookmarks=1
+    let NERDTreeWinSize=30
+    let g:NERDTreeDirArrowExpandable = '▸'
+    let g:NERDTreeDirArrowCollapsible = '▾'
+    nnoremap <leader>nf :NERDTreeFind<CR>
+    nnoremap <F4> :NERDTreeToggle<CR>
+    nnoremap <leader>k :NERDTree<CR>
+
+  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on':  'NERDTreeToggle' }
+    let g:NERDTreeIndicatorMapCustom = {
+        \ "Modified"  : "✹",
+        \ "Staged"    : "✚",
+        \ "Untracked" : "✭",
+        \ "Renamed"   : "➜",
+        \ "Unmerged"  : "═",
+        \ "Deleted"   : "✖",
+        \ "Dirty"     : "✗",
+        \ "Clean"     : "✔︎",
+        \ 'Ignored'   : '☒',
+        \ "Unknown"   : "?"
+        \ }
+  " }}}
     " {{{ EasyMotion
     Plug 'easymotion/vim-easymotion'
         let g:EasyMotion_leader_key = '\'
-    " }}}
-
-    " {{{ vim-airline
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
-        let g:airline#extensions#tabline#enabled = 1
-        let g:airline_powerline_fonts = 1
-        set laststatus=2
-    " }}}
-    " {{{ dracula scheme
-    Plug 'dracula/vim'
-    " }}}
-    " {{{ ale
-    Plug 'w0rp/ale'
-		let g:ale_fixers = {
-				\   'javascript': ['eslint'],
-				\   'vue': ['eslint'],
-				\}
     " }}}
 
     " Plugin for fe
@@ -269,66 +272,70 @@ call plug#begin('~/.vim/plugged')
         let g:miniBufExplMaxHeight=2
         let g:miniBufExplorerMoreThanOne=0
     "	}}}
-    Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
-        autocmd! User goyo.vim echom 'Goyo is now loaded!'
-    Plug 'tpope/vim-fugitive'
-		nnoremap <leader>gw :Gwrite<cr>
-		nnoremap <leader>gc :Gcommit<cr>
-		nnoremap <leader>gs :Gstatus<cr>
-		nnoremap <leader>gl :Gwrite<cr>
+  Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+    autocmd! User goyo.vim echom 'Goyo is now loaded!'
+  " {{{ vim-fugitive
+  Plug 'tpope/vim-fugitive'
+    nnoremap <leader>gw :Gwrite<cr>
+    nnoremap <leader>gc :Gcommit<cr>
+    nnoremap <leader>gs :Gstatus<cr>
+    nnoremap <leader>gl :Glog<cr>
+  " }}}
+
 call plug#end()
 " }}}
 
+colors dracula
 
 " {{{ 注释折叠
 augroup ft_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
+  autocmd!
+  autocmd FileType vim setlocal foldmethod=marker
 augroup END
 " }}}
 
 " {{{ Hex Model Toggle
 if !exists('g:_hex_model_toggle')
-    let g:_hex_model_toggle=0
+  let g:_hex_model_toggle=0
 endif
 function! HexModelToggle()
-    if g:_hex_model_toggle == 0
-        let g:_hex_model_toggle=1
-        execute ":%!xxd<cr>"
-    else
-        let g:_hex_model_toggle=0
-        execute ":%!xxd -r<cr>"
-    endif
+  if g:_hex_model_toggle == 0
+    let g:_hex_model_toggle=1
+    execute ":%!xxd<cr>"
+  else
+    let g:_hex_model_toggle=0
+    execute ":%!xxd -r<cr>"
+  endif
 endfunction
 " }}}
 
 " {{{ Git log
 function! GitLog()
-    let bn = bufname("%")
-    execute "!git lg " . bn
+  let bn = bufname("%")
+  execute "!git lg " . bn
 endfunction
 function! GitLol()
-    let bn = bufname("%")
-    execute "!git lol " . bn
+  let bn = bufname("%")
+  execute "!git lol " . bn
 endfunction
 " }}}
 
 " {{{ 定义函数AutoSetFileHead，自动插入文件头
 autocmd BufNewFile *.sh,*.py exec ":call AutoSetFileHead()"
 function! AutoSetFileHead()
-    "如果文件类型为.sh文件
-    if &filetype == 'sh'
-        call setline(1, "\#!/bin/bash")
-    endif
+  "如果文件类型为.sh文件
+  if &filetype == 'sh'
+    call setline(1, "\#!/bin/bash")
+  endif
 
-    "如果文件类型为python
-    if &filetype == 'python'
-        call setline(1, "\#!/usr/bin/env python")
-        call append(1, "\# encoding: utf-8")
-    endif
+  "如果文件类型为python
+  if &filetype == 'python'
+    call setline(1, "\#!/usr/bin/env python")
+    call append(1, "\# encoding: utf-8")
+  endif
 
-    normal G
-    normal o
-    normal o
+  normal G
+  normal o
+  normal o
 endfunc
 " }}}
