@@ -5,9 +5,9 @@ let g:mapleader = ','
 syntax enable
 set nocompatible
 set autowrite
-set tabstop=2           " 设置制表符(tab键)的宽度
-set softtabstop=2       " 设置软制表符的宽度
-set shiftwidth=2        " (自动) 缩进使用的4个空格
+set tabstop=4           " 设置制表符(tab键)的宽度
+set softtabstop=4       " 设置软制表符的宽度
+set shiftwidth=4        " (自动) 缩进使用的4个空格
 set expandtab           " 将tab键展开为空格
 set hlsearch            " 高亮搜索匹配结果
 set incsearch           " 输入字符串就显示匹配点
@@ -27,11 +27,6 @@ set mouse=a             " Enable mouse usage (all modes)    "使用鼠标
 set whichwrap=b,s,<,>,[,]   " 光标从行首和行末时可以跳到另一行去
 set showcmd             " 命令行显示输入的命令
 set showmode            " 命令行显示vim当前模式
-set term=screen-256color-italic
-let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-set termguicolors
-
 " highlight ColorColumn ctermbg=235 guibg=#2c2d27
 let &colorcolumn="100"
 syntax on
@@ -131,16 +126,18 @@ call plug#begin('~/.vim/plugged')
   " }}}
   " {{{ ale
   Plug 'w0rp/ale'
-  let g:ale_fixers = {
+    let g:ale_fixers = {
         \   'javascript': ['eslint'],
         \   'vue': ['eslint'],
         \}
+    nnoremap <silent> <leader>ak :ALENext<cr>
+    nnoremap <silent> <leader>aj :ALEPrevious<cr>
   " }}}
 
   " {{{ NERDTree
   Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-    set runtimepath+=~/.vim/plugged/nerdtree
-    so ~/.vim/plugged/nerdtree/autoload/nerdtree.vim
+    " set runtimepath+=~/.vim/plugged/nerdtree
+    " so ~/.vim/plugged/nerdtree/autoload/nerdtree.vim
     let NERDTreeWinPos='left'
     let NERDTreeShowBookmarks=1
     let NERDTreeWinSize=30
@@ -150,7 +147,7 @@ call plug#begin('~/.vim/plugged')
     nnoremap <F4> :NERDTreeToggle<CR>
     nnoremap <leader>k :NERDTree<CR>
 
-  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on':  'NERDTreeToggle' }
+  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on':  'NERDTree' }
     let g:NERDTreeIndicatorMapCustom = {
         \ "Modified"  : "✹",
         \ "Staged"    : "✚",
@@ -169,6 +166,29 @@ call plug#begin('~/.vim/plugged')
         let g:EasyMotion_leader_key = '\'
     " }}}
 
+    " {{{ NERDcommenter
+    Plug 'scrooloose/nerdcommenter'
+      " Add spaces after comment delimiters by default
+      let g:NERDSpaceDelims = 1
+      
+      " Use compact syntax for prettified multi-line comments
+      let g:NERDCompactSexyComs = 1
+      
+      " Align line-wise comment delimiters flush left instead of following code indentation
+      let g:NERDDefaultAlign = 'left'
+      
+      " Set a language to use its alternate delimiters by default
+      let g:NERDAltDelims_java = 1
+      
+      " Add your own custom formats or override the defaults
+      let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+      
+      " Allow commenting and inverting empty lines (useful when commenting a 
+      let g:NERDCommentEmptyLines = 1
+      
+      " Enable trimming of trailing whitespace when uncommenting
+      let g:NERDTrimTrailingWhitespace = 1
+    " }}}
     " Plugin for fe
     " {{{ vim-javascript
     Plug 'pangloss/vim-javascript'
@@ -176,13 +196,13 @@ call plug#begin('~/.vim/plugged')
     Plug 'marijnh/tern_for_vim'
     " }}}
     " Plug 'JavaScript-Indent'
-    " {{{ vim-vue
-    Plug 'posva/vim-vue'
-        au BufNewFile,BufRead *.vue setf vue
-        autocmd FileType vue syntax sync fromstart
-    " }}}
     " {{{ vim-es6
     Plug 'isRuslan/vim-es6'
+    " }}}
+    " {{{ vim-vue
+    Plug 'posva/vim-vue'
+        au BufNewFile,BufRead *.vue setf vue.html.javascript.css
+        autocmd FileType vue syntax sync fromstart
     " }}}
     " {{{ git
     Plug 'airblade/vim-gitgutter'
@@ -280,12 +300,21 @@ call plug#begin('~/.vim/plugged')
     nnoremap <leader>gc :Gcommit<cr>
     nnoremap <leader>gs :Gstatus<cr>
     nnoremap <leader>gl :Glog<cr>
+    nnoremap <leader>gb :Gblame<cr>
+    nnoremap <leader>gd :Gdiff<cr>
   " }}}
-
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 call plug#end()
 " }}}
 
 colors dracula
+
+" set term=screen-256color-italic
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
+
+hi Normal guibg=NONE ctermbg=NONE
 
 " {{{ 注释折叠
 augroup ft_vim
