@@ -161,6 +161,7 @@ call plug#begin('~/.vim/plugged')
         \ "Unknown"   : "?"
         \ }
   " }}}
+  
     " {{{ EasyMotion
     Plug 'easymotion/vim-easymotion'
         let g:EasyMotion_leader_key = '\'
