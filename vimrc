@@ -39,7 +39,7 @@ filetype plugin on
 " 缩进规则 expendtab {{{
 augroup expandtab
   autocmd filetype make set noexpandtab
-  autocmd FileType * set ts=2 sts=2 sw=2 | set expandtab
+  " autocmd FileType * set ts=2 sts=2 sw=2 | set expandtab
   autocmd FileType python set ts=4 | set sw=4 | set expandtab
   autocmd Filetype html setlocal ts=4 sts=4 sw=4 | set expandtab
   autocmd Filetype javascript setlocal ts=4 sts=4 sw=4 | set expandtab
@@ -93,7 +93,12 @@ nnoremap <c-l> <c-w>l
 nnoremap <C-e> 2<C-e>
 nnoremap <C-y> 2<C-y>
 
-inoremap <leader>n <esc>
+nnoremap <C-n> :bn<cr>
+nnoremap <C-p> :bp<cr>
+
+inoremap jk <esc>
+
+nnoremap <leader>yd :let a=expand("<cword>")<Bar>exec '!echo ' .a. '&dic ck ' .a<CR>
 
 " 复制选中区到系统剪切板中
 if has('mac')
@@ -120,8 +125,15 @@ call plug#begin('~/.vim/plugged')
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   " let g:airline_theme='atomic'
-    let g:airline#extensions#tabline#enabled = 1
     let g:airline_powerline_fonts = 1
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
+    let g:airline#extensions#tabline#show_tab_nr = 1
+    let g:airline#extensions#tabline#formatter = 'jsformatter'
+    let g:airline#extensions#tabline#buffer_nr_show = 0
+    let g:airline#extensions#tabline#fnametruncate = 16
+    let g:airline#extensions#tabline#fnamecollapse = 2
+    let g:airline#extensions#tabline#buffer_idx_mode = 1
     set laststatus=2
   " }}}
   " {{{ ale
@@ -202,7 +214,8 @@ call plug#begin('~/.vim/plugged')
     " }}}
     " {{{ vim-vue
     Plug 'posva/vim-vue'
-        au BufNewFile,BufRead *.vue setf vue.html.javascript.css
+        " au BufNewFile,BufRead *.vue setf vue.html.javascript.css
+        au BufNewFile,BufRead *.vue setf vue
         autocmd FileType vue syntax sync fromstart
     " }}}
     " {{{ git
@@ -276,25 +289,25 @@ call plug#begin('~/.vim/plugged')
     " }}}
 
     " {{{	ctrlp
-    Plug 'kien/ctrlp.vim'
+    " Plug 'kien/ctrlp.vim'
     " }}}
     " {{{ ack
     Plug 'mileszs/ack.vim'
     " }}}
     " {{{ minibufexpl
-    Plug 'vim-scripts/minibufexpl.vim'
-        let g:miniBufExplMapWindowNavVim = 1
-        let g:miniBufExplMapWindowNavArrows = 1
-        let g:miniBufExplMapCTabSwitchBufs = 0
-        " <C-TAB> and <C-S-TAB> 多被终端应用占用，使用tn和tp实现buf循环切换
-        noremap <silent>tn <ESC>:MBEbn<CR>
-        noremap <silent>tp <ESC>:MBEbp<CR>
-        let g:miniBufExplModSelTarget = 1
-        let g:miniBufExplMaxHeight=2
-        let g:miniBufExplorerMoreThanOne=0
+    " Plug 'vim-scripts/minibufexpl.vim'
+    "     let g:miniBufExplMapWindowNavVim = 1
+    "     let g:miniBufExplMapWindowNavArrows = 1
+    "     let g:miniBufExplMapCTabSwitchBufs = 0
+    "     " <C-TAB> and <C-S-TAB> 多被终端应用占用，使用tn和tp实现buf循环切换
+    "     noremap <silent>tn <ESC>:MBEbn<CR>
+    "     noremap <silent>tp <ESC>:MBEbp<CR>
+    "     let g:miniBufExplModSelTarget = 1
+    "     let g:miniBufExplMaxHeight=2
+    "     let g:miniBufExplorerMoreThanOne=0
     "	}}}
   Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
-    autocmd! User goyo.vim echom 'Goyo is now loaded!'
+    " !autocmd! User goyo.vim echom 'Goyo is now loaded!'
   " {{{ vim-fugitive
   Plug 'tpope/vim-fugitive'
     nnoremap <leader>gw :Gwrite<cr>
@@ -369,3 +382,4 @@ function! AutoSetFileHead()
   normal o
 endfunc
 " }}}
+"
