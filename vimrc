@@ -5,9 +5,9 @@ let g:mapleader = ','
 syntax enable
 set nocompatible
 set autowrite
-set tabstop=4           " 设置制表符(tab键)的宽度
-set softtabstop=4       " 设置软制表符的宽度
-set shiftwidth=4        " (自动) 缩进使用的4个空格
+set tabstop=2           " 设置制表符(tab键)的宽度
+set softtabstop=2       " 设置软制表符的宽度
+set shiftwidth=2        " (自动) 缩进使用的4个空格
 set expandtab           " 将tab键展开为空格
 set hlsearch            " 高亮搜索匹配结果
 set incsearch           " 输入字符串就显示匹配点
@@ -27,8 +27,6 @@ set mouse=a             " Enable mouse usage (all modes)    "使用鼠标
 set whichwrap=b,s,<,>,[,]   " 光标从行首和行末时可以跳到另一行去
 set showcmd             " 命令行显示输入的命令
 set showmode            " 命令行显示vim当前模式
-" highlight ColorColumn ctermbg=235 guibg=#2c2d27
-let &colorcolumn="100"
 syntax on
 
 " colors desert
@@ -42,7 +40,7 @@ augroup expandtab
   " autocmd FileType * set ts=2 sts=2 sw=2 | set expandtab
   autocmd FileType python set ts=4 | set sw=4 | set expandtab
   autocmd Filetype html setlocal ts=4 sts=4 sw=4 | set expandtab
-  autocmd Filetype javascript setlocal ts=4 sts=4 sw=4 | set expandtab
+  autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 | set expandtab
   autocmd Filetype vue setlocal ts=4 sts=4 sw=4 | set expandtab
 augroup END
 " }}}
@@ -108,6 +106,8 @@ else
   cnoremap <c-v> <c-r>9
 endif
 
+call has('python3')
+
 " {{{ use vim-plug manage plugins
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -119,7 +119,7 @@ endif
 " {{{ plugin list
 call plug#begin('~/.vim/plugged')
   " {{{ dracula scheme
-  Plug 'dracula/vim', { 'as': 'dracula' }
+  Plug 'dracula/vim', {'tag': '1.5.0', 'as': 'dracula' }
   " }}}
   " {{{ vim-airline
   Plug 'vim-airline/vim-airline'
@@ -138,10 +138,25 @@ call plug#begin('~/.vim/plugged')
   " }}}
   " {{{ ale
   Plug 'w0rp/ale'
+    let g:ale_set_highlights = 0
+    let g:ale_change_sign_column_color = 0
+    let g:ale_sign_column_always = 1
+    let g:ale_sign_error = '✖'
+    let g:ale_sign_warning = '⚠'
+    let g:ale_echo_msg_error_str = '✖'
+    let g:ale_echo_msg_warning_str = '⚠'
+    let g:ale_echo_msg_format = '%severity% %s% [%linter%% code%]'
     let g:ale_fixers = {
         \   'javascript': ['eslint'],
         \   'vue': ['eslint'],
         \}
+    let g:ale_fixers = {}
+    let g:ale_fixers['javascript'] = ['prettier']
+    let g:ale_fixers['typescript'] = ['prettier', 'tslint']
+    let g:ale_fixers['json'] = ['prettier']
+    let g:ale_fixers['css'] = ['prettier']
+    let g:ale_javascript_prettier_use_local_config = 1
+    let g:ale_fix_on_save = 0
     nnoremap <silent> <leader>ak :ALENext<cr>
     nnoremap <silent> <leader>aj :ALEPrevious<cr>
   " }}}
@@ -173,7 +188,7 @@ call plug#begin('~/.vim/plugged')
         \ "Unknown"   : "?"
         \ }
   " }}}
-  
+
     " {{{ EasyMotion
     Plug 'easymotion/vim-easymotion'
         let g:EasyMotion_leader_key = '\'
@@ -183,22 +198,18 @@ call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdcommenter'
       " Add spaces after comment delimiters by default
       let g:NERDSpaceDelims = 1
-      
       " Use compact syntax for prettified multi-line comments
       let g:NERDCompactSexyComs = 1
-      
       " Align line-wise comment delimiters flush left instead of following code indentation
       let g:NERDDefaultAlign = 'left'
-      
       " Set a language to use its alternate delimiters by default
       let g:NERDAltDelims_java = 1
-      
       " Add your own custom formats or override the defaults
       let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-      
-      " Allow commenting and inverting empty lines (useful when commenting a 
+
+      " Allow commenting and inverting empty lines (useful when commenting a
       let g:NERDCommentEmptyLines = 1
-      
+
       " Enable trimming of trailing whitespace when uncommenting
       let g:NERDTrimTrailingWhitespace = 1
     " }}}
@@ -206,7 +217,7 @@ call plug#begin('~/.vim/plugged')
     " {{{ vim-javascript
     Plug 'pangloss/vim-javascript'
         let javascript_enable_domhtmlcss = 1
-    Plug 'marijnh/tern_for_vim'
+    Plug 'marijnh/tern_for_vim', {'do': 'npm install'}
     " }}}
     " Plug 'JavaScript-Indent'
     " {{{ vim-es6
@@ -242,7 +253,7 @@ call plug#begin('~/.vim/plugged')
         endif
     endfunction
     Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
-        let g:ycm_server_python_interpreter='/usr/bin/python'
+        " let g:ycm_server_python_interpreter='/usr/local/bin/python'
         " 自动补全配置
         set completeopt=longest,menu
         "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
@@ -318,10 +329,15 @@ call plug#begin('~/.vim/plugged')
     nnoremap <leader>gd :Gdiff<cr>
   " }}}
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'vim-vdebug/vdebug', { 'for': 'python' }
+  " Plug 'jaredly/vim-debug', {'tag': '1.5.4', 'do': 'python setup.py install'}
 call plug#end()
 " }}}
 
 colors dracula
+
+highlight ColorColumn ctermbg=235 guibg=#2c2d27
+let &colorcolumn="100"
 
 " set term=screen-256color-italic
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
