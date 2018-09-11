@@ -107,7 +107,6 @@ else
 endif
 
 call has('python3')
-
 " {{{ use vim-plug manage plugins
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -124,7 +123,8 @@ call plug#begin('~/.vim/plugged')
   " {{{ vim-airline
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-  " let g:airline_theme='atomic'
+    " let g:airline_theme='atomic'
+    let g:airline_theme='dracula'
     let g:airline_powerline_fonts = 1
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
