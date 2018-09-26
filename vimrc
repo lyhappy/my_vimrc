@@ -150,19 +150,21 @@ call plug#begin('~/.vim/plugged')
     let g:ale_echo_msg_error_str = '✖'
     let g:ale_echo_msg_warning_str = '⚠'
     let g:ale_echo_msg_format = '%severity% %s% [%linter%% code%]'
+    let g:ale_linters = {
+          \ 'javascript': ['eslint'],
+          \ 'vue': ['eslinit']
+          \ }
     let g:ale_fixers = {
-        \   'javascript': ['eslint'],
-        \   'vue': ['eslint'],
-        \}
-    let g:ale_fixers = {}
-    let g:ale_fixers['javascript'] = ['prettier']
-    let g:ale_fixers['typescript'] = ['prettier', 'tslint']
-    let g:ale_fixers['json'] = ['prettier']
-    let g:ale_fixers['css'] = ['prettier']
+          \ 'javascript': ['prettier', 'eslint'],
+          \ 'typescript': ['prettier', 'tslint'],
+          \ 'json': ['prettier'],
+          \ 'css': ['prettier'],
+          \ 'vue': ['eslint']
+          \ }
     let g:ale_javascript_prettier_use_local_config = 1
     let g:ale_fix_on_save = 0
-    nnoremap <silent> <leader>ak :ALENext<cr>
-    nnoremap <silent> <leader>aj :ALEPrevious<cr>
+    nnoremap <silent> <leader>aj :ALENext<cr>
+    nnoremap <silent> <leader>ak :ALEPrevious<cr>
   " }}}
 
   " {{{ NERDTree
