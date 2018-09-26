@@ -365,6 +365,9 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 " }}}
 
+exec "set listchars=tab:\uBB\uBB,nbsp:~,trail:\uB7"
+set list
+
 colors dracula
 
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
