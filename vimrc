@@ -94,6 +94,10 @@ nnoremap <C-y> 2<C-y>
 nnoremap <C-n> :bn<cr>
 nnoremap <C-p> :bp<cr>
 
+" swap : & ;
+nnoremap ; :
+nnoremap : ;
+
 inoremap jk <esc>
 
 nnoremap <leader>yd :let a=expand("<cword>")<Bar>exec '!echo ' .a. '&dic ck ' .a<CR>
