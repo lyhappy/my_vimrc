@@ -370,7 +370,7 @@ set list
 
 colors dracula
 
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
+highlight ColorColumn ctermbg=magenta guibg=#2c2d27
 let &colorcolumn="100"
 
 " set term=screen-256color-italic
@@ -432,4 +432,3 @@ function! AutoSetFileHead()
   normal o
 endfunc
 " }}}
-"
