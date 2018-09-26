@@ -322,9 +322,11 @@ call plug#begin('~/.vim/plugged')
     "     let g:miniBufExplModSelTarget = 1
     "     let g:miniBufExplMaxHeight=2
     "     let g:miniBufExplorerMoreThanOne=0
-    "	}}}
+    " }}}
+  " {{{ goyo for markdown
   Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
-    " !autocmd! User goyo.vim echom 'Goyo is now loaded!'
+  " !autocmd! User goyo.vim echom 'Goyo is now loaded!'
+  " }}}
   " {{{ vim-fugitive
   Plug 'tpope/vim-fugitive'
     nnoremap <leader>gw :Gwrite<cr>
@@ -334,9 +336,13 @@ call plug#begin('~/.vim/plugged')
     nnoremap <leader>gb :Gblame<cr>
     nnoremap <leader>gd :Gdiff<cr>
   " }}}
+  " {{{ fzf
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  " }}}
+  " {{{ vim vdebug for python and php
   Plug 'vim-vdebug/vdebug', { 'for': 'python' }
   " Plug 'jaredly/vim-debug', {'tag': '1.5.4', 'do': 'python setup.py install'}
+  " }}}
 call plug#end()
 " }}}
 
