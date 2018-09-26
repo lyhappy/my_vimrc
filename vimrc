@@ -243,6 +243,8 @@ call plug#begin('~/.vim/plugged')
     " Plug 'MarcWeber/vim-addon-mw-utils'
     " Plug 'tomtom/tlib_vim'
     " Plug 'garbas/vim-snipmate'
+      let g:UltiSnipsEditSplit = 'vertical'
+      let g:UltiSnipsListSnippets = '<s-tab>'
 
     " Optional:
     Plug 'honza/vim-snippets'
@@ -360,6 +362,7 @@ call plug#begin('~/.vim/plugged')
         \ '<c-o>:silent! TableModeDisable<cr>' : '__'
   " }}}
     Plug 'jceb/vim-orgmode'
+call plug#end()
 " }}}
 
 colors dracula
