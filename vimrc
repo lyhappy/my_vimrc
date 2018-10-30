@@ -362,6 +362,16 @@ call plug#begin('~/.vim/plugged')
         \ '<c-o>:silent! TableModeDisable<cr>' : '__'
   " }}}
     Plug 'jceb/vim-orgmode'
+    Plug 'vim-scripts/gtags.vim'
+    " cscope
+    set cscopetag                  " 使用 cscope 作为 tags 命令
+    set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
+
+    " gtags
+    let GtagsCscope_Auto_Load = 1
+    let CtagsCscope_Auto_Map = 1
+    let GtagsCscope_Quiet = 1
+    "}}}
 call plug#end()
 " }}}
 
@@ -431,4 +441,63 @@ function! AutoSetFileHead()
   normal o
   normal o
 endfunc
+" }}}
+
+" {{{ for gtags
+au VimEnter * cs add GTAGS
+" au VimEnter * call VimEnterCallback()
+au BufAdd *.[ch] call FindGtags(expand('<afile>'))
+au BufWritePost *.[ch] call UpdateGtags(expand('<afile>'))
+
+" {{{ FindFiles
+function! FindFiles(pat, ...)
+  let path = ''
+  for str in a:000
+    let path .= str . ','
+  endfor
+
+  if path == ''
+    let path = &path
+  endif
+
+  echo 'finding...'
+  redraw
+  call append(line('$'), split(globpath(path, a:pat), '\n'))
+  echo 'finding...done!'
+  redraw
+endfunc
+" }}}
+" {{{ VimEnterCallback
+function! VimEnterCallback()
+  for f in argv()
+    if fnamemodify(f, ':e') != 'c' && fnamemodify(f, ':e') != 'h'
+      continue
+    endif
+
+    call FindGtags(f)
+  endfor
+endfunc
+" }}}
+" {{{ FindGtags
+function! FindGtags(f)
+  let dir = fnamemodify(a:f, ':p:h')
+  while 1
+    let tmp = dir . '/GTAGS'
+    if filereadable(tmp)
+      echo tmp
+      exe 'cs add ' . tmp . ' ' . dir
+      break
+    elseif dir == '/'
+      break
+    endif
+
+    let dir = fnamemodify(dir, ":h")
+  endwhile
+endfunc
+" }}}
+" {{{ UpdateGtags
+function! UpdateGtags(f)
+  let dir = fnamemodify(a:f, ':p:h')
+  exe 'silent !cd ' . dir . ' && global -u &> /dev/null &'
+endfunction
 " }}}
