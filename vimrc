@@ -332,6 +332,7 @@ call plug#begin('~/.vim/plugged')
   " {{{ vim-fugitive
   Plug 'tpope/vim-fugitive'
     nnoremap <leader>gw :Gwrite<cr>
+    nnoremap <leader>gr :Gread<cr>
     nnoremap <leader>gc :Gcommit<cr>
     nnoremap <leader>gs :Gstatus<cr>
     nnoremap <leader>gl :Glog<cr>
