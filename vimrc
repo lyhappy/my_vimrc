@@ -151,7 +151,7 @@ call plug#begin('~/.vim/plugged')
     let g:ale_echo_msg_warning_str = '⚠'
     let g:ale_echo_msg_format = '%severity% %s% [%linter%% code%]'
     let g:ale_linters = {
-          \ 'javascript': ['eslint'],
+          \ 'javascript': ['eslint', 'flow', 'flow-language-server'],
           \ 'vue': ['eslinit']
           \ }
     let g:ale_fixers = {
