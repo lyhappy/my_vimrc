@@ -512,4 +512,4 @@ function! SourceIfExists(file)
 endfunction
 " }
 
-call SourceIfExists('.vimrc')
+call SourceIfExists('.vimrc.local')
