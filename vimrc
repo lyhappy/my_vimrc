@@ -235,9 +235,6 @@ call plug#begin('~/.vim/plugged')
         au BufNewFile,BufRead *.vue setf vue
         autocmd FileType vue syntax sync fromstart
     " }}}
-    " {{{ git
-    Plug 'airblade/vim-gitgutter'
-    " }}}
     " {{{ snippet
     Plug 'SirVer/ultisnips'
     " Plug 'MarcWeber/vim-addon-mw-utils'
@@ -325,43 +322,47 @@ call plug#begin('~/.vim/plugged')
     "     let g:miniBufExplMaxHeight=2
     "     let g:miniBufExplorerMoreThanOne=0
     " }}}
-  " {{{ goyo for markdown
-  Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
-  " !autocmd! User goyo.vim echom 'Goyo is now loaded!'
-  " }}}
-  " {{{ vim-fugitive
-  Plug 'tpope/vim-fugitive'
-    nnoremap <leader>gw :Gwrite<cr>
-    nnoremap <leader>gr :Gread<cr>
-    nnoremap <leader>gc :Gcommit<cr>
-    nnoremap <leader>gs :Gstatus<cr>
-    nnoremap <leader>gl :Glog<cr>
-    nnoremap <leader>gb :Gblame<cr>
-    nnoremap <leader>gd :Gdiff<cr>
-  " }}}
-  " {{{ fzf
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  " }}}
-  " {{{ vim vdebug for python and php
-  Plug 'vim-vdebug/vdebug', { 'for': 'python' }
-  " Plug 'jaredly/vim-debug', {'tag': '1.5.4', 'do': 'python setup.py install'}
-  " }}}
-  " {{{ vim-table-mode
-  Plug 'dhruvasagar/vim-table-mode'
-  function! s:isAtStartOfLine(mapping)
-    let text_before_cursor = getline('.')[0 : col('.')-1]
-    let mapping_pattern = '\V' . escape(a:mapping, '\')
-    let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
-    return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
-  endfunction
+    " {{{ goyo for markdown
+    Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+    " !autocmd! User goyo.vim echom 'Goyo is now loaded!'
+    " }}}
+    " {{ gitgutter
+    Plug 'airblade/vim-gitgutter'
+      nnoremap <leader>gg :GitGutter<CR>
+    " }}}
+    " {{{ vim-fugitive
+    Plug 'tpope/vim-fugitive'
+      nnoremap <leader>gw :Gwrite<cr>
+      nnoremap <leader>gr :Gread<cr>
+      nnoremap <leader>gc :Gcommit<cr>
+      nnoremap <leader>gs :Gstatus<cr>
+      nnoremap <leader>gl :Glog<cr>
+      nnoremap <leader>gb :Gblame<cr>
+      nnoremap <leader>gd :Gdiff<cr>
+    " }}}
+    " {{{ fzf
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    " }}}
+    " {{{ vim vdebug for python and php
+    Plug 'vim-vdebug/vdebug', { 'for': 'python' }
+    " Plug 'jaredly/vim-debug', {'tag': '1.5.4', 'do': 'python setup.py install'}
+    " }}}
+    " {{{ vim-table-mode
+    Plug 'dhruvasagar/vim-table-mode'
+    function! s:isAtStartOfLine(mapping)
+      let text_before_cursor = getline('.')[0 : col('.')-1]
+      let mapping_pattern = '\V' . escape(a:mapping, '\')
+      let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+      return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+    endfunction
 
-  inoreabbrev <expr> <bar><bar>
-        \ <SID>isAtStartOfLine('\|\|') ?
-        \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
-  inoreabbrev <expr> __
-        \ <SID>isAtStartOfLine('__') ?
-        \ '<c-o>:silent! TableModeDisable<cr>' : '__'
-  " }}}
+    inoreabbrev <expr> <bar><bar>
+          \ <SID>isAtStartOfLine('\|\|') ?
+          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+    inoreabbrev <expr> __
+          \ <SID>isAtStartOfLine('__') ?
+          \ '<c-o>:silent! TableModeDisable<cr>' : '__'
+    " }}}
     Plug 'jceb/vim-orgmode'
     Plug 'vim-scripts/gtags.vim'
     " cscope
