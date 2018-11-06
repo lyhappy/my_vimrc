@@ -374,6 +374,9 @@ call plug#begin('~/.vim/plugged')
     let CtagsCscope_Auto_Map = 1
     let GtagsCscope_Quiet = 1
     "}}}
+    "{{{ for latex
+    Plug 'lervag/vimtex', { 'for' : 'tex' }
+    "}}}
 call plug#end()
 " }}}
 
