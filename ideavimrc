@@ -24,6 +24,8 @@ nnoremap ,u bgUw
 nnoremap ," viw<esc>a"<esc>hbi"<esc>lel
 nnoremap ,' viw<esc>a'<esc>hbi'<esc>lel
 
+inoremap jk <esc>
+
 inoremap ,n <esc>l
 
 set scrolloff=7
