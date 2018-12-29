@@ -3,6 +3,7 @@ let mapleader = ','
 let g:mapleader = ','
 
 syntax enable
+set cursorline
 set nocompatible
 set autowrite
 set tabstop=2           " 设置制表符(tab键)的宽度
@@ -71,6 +72,8 @@ nnoremap <leader>v- :vertical resize -10<CR>
 " 按,gU 当前word变为大写
 nnoremap <leader>u viwgU
 nnoremap <leader>l viwgu
+
+nnoremap <leader>eg :terminal eagle.py -f %<cr>
 " }}}
 
 " Press H to line head
@@ -122,7 +125,7 @@ endif
 " {{{ plugin list
 call plug#begin('~/.vim/plugged')
   " {{{ dracula scheme
-  Plug 'dracula/vim', {'tag': '1.5.0', 'as': 'dracula' }
+  Plug 'dracula/vim', {'as': 'dracula' }
   " }}}
   " {{{ vim-airline
   Plug 'vim-airline/vim-airline'
@@ -133,7 +136,7 @@ call plug#begin('~/.vim/plugged')
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
     let g:airline#extensions#tabline#show_tab_nr = 1
-    let g:airline#extensions#tabline#formatter = 'jsformatter'
+    let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
     let g:airline#extensions#tabline#buffer_nr_show = 0
     let g:airline#extensions#tabline#fnametruncate = 16
     let g:airline#extensions#tabline#fnamecollapse = 2
@@ -195,10 +198,15 @@ call plug#begin('~/.vim/plugged')
         \ }
   " }}}
 
-    " {{{ EasyMotion
-    Plug 'easymotion/vim-easymotion'
-        let g:EasyMotion_leader_key = '\'
-    " }}}
+  " {{{ tagbar
+    Plug 'majutsushi/tagbar'
+    nnoremap <leader>t :Tagbar<cr>
+  " }}}
+
+  " {{{ EasyMotion
+  Plug 'easymotion/vim-easymotion'
+      let g:EasyMotion_leader_key = '\'
+  " }}}
 
     " {{{ NERDcommenter
     Plug 'scrooloose/nerdcommenter'
@@ -338,7 +346,7 @@ call plug#begin('~/.vim/plugged')
       nnoremap <leader>gs :Gstatus<cr>
       nnoremap <leader>gl :Glog<cr>
       nnoremap <leader>gb :Gblame<cr>
-      nnoremap <leader>gd :Gdiff<cr>
+      nnoremap <leader>gd :Gvdiff<cr>
     " }}}
     " {{{ fzf
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -386,7 +394,7 @@ set list
 colors dracula
 
 highlight ColorColumn ctermbg=magenta guibg=#2c2d27
-let &colorcolumn="100"
+let &colorcolumn="120"
 
 " set term=screen-256color-italic
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
